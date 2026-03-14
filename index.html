@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Lea LED Display ❤️</title>
+<title>LED Displays ❤️</title>
 
 <style>
 body{
@@ -89,13 +89,13 @@ button:hover{
 <h1>❤️ Nachricht an Lea ❤️</h1>
 
 <!-- Nachricht -->
-<input id="msg" placeholder="Deine Nachricht">
+<input id="msg_1" placeholder="Deine Nachricht">
 
 <br>
 
 <!-- Helligkeit -->
 <label>Helligkeit</label><br>
-<input class="slider" type="range" min="1" max="15" value="5" id="brightness">
+<input class="slider" type="range" min="1" max="15" value="5" id="brightness_1">
 
 <br>
 
@@ -108,9 +108,9 @@ button:hover{
 <!-- Statusanzeige -->
 <div class="status">
 <h3>Status</h3>
-<p>Aktueller Text: <span id="statusText">-</span></p>
-<p>Helligkeit: <span id="statusBrightness">-</span></p>
-<p>LED: <span id="statusOn">-</span></p>
+<p>Aktueller Text: <span id="statusText_1">-</span></p>
+<p>Helligkeit: <span id="statusBrightness_1">-</span></p>
+<p>LED: <span id="statusOn_1">-</span></p>
 </div>
 </div>
 
@@ -122,6 +122,8 @@ const firebaseURL = "https://lea-led-display-default-rtdb.firebaseio.com/display
 function sendMessage(){
     let message = document.getElementById("msg").value;
     let brightness = document.getElementById("brightness").value;
+    let message_1 = document.getElementById("msg_1").value;
+    let brightness_1 = document.getElementById("brightness_1").value;
 
     fetch(firebaseURL,{
         method:"PUT",
@@ -158,15 +160,19 @@ function updateStatus(){
             document.getElementById("statusText").innerText = data.message || "-";
             document.getElementById("statusBrightness").innerText = data.brightness || "-";
             document.getElementById("statusOn").innerText = data.on ? "AN" : "AUS";
+            document.getElementById("statusText_1").innerText = data.message_1 || "-";
+            document.getElementById("statusBrightness_1").innerText = data.brightness_1 || "-";
+            document.getElementById("statusOn_1").innerText = data.on_1 ? "AN" : "AUS";
 
             // Slider auf aktuelle Helligkeit setzen
             if(data.brightness) document.getElementById("brightness").value = data.brightness;
+            if(data.brightness_1) document.getElementById("brightness_1").value = data.brightness_1;
         }
     });
 }
 
 // Status alle 2 Sekunden aktualisieren
-setInterval(updateStatus, 2000);
+setInterval(updateStatus, 5000);
 
 // Initial laden
 updateStatus();
