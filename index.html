@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 <meta charset="UTF-8">
 <title>Lea LED Display ❤️</title>
 
 <style>
-
 body{
     background: linear-gradient(135deg,#ff9a9e,#fad0c4);
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     text-align:center;
     color:white;
 }
 
 .container{
-    margin-top:100px;
+    margin-top:50px;
+    max-width: 500px;
+    margin-left:auto;
+    margin-right:auto;
+    background: rgba(255,255,255,0.1);
+    padding:20px;
+    border-radius:15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
 }
 
 input,button{
-    font-size:20px;
-    padding:10px;
+    font-size:18px;
+    padding:8px;
     margin:10px;
     border-radius:10px;
     border:none;
@@ -30,6 +35,7 @@ button{
     background:#ff4d6d;
     color:white;
     cursor:pointer;
+    transition:0.2s;
 }
 
 button:hover{
@@ -37,11 +43,16 @@ button:hover{
 }
 
 .slider{
-    width:300px;
+    width:250px;
 }
 
+.status{
+    margin-top:20px;
+    background: rgba(255,255,255,0.2);
+    padding:10px;
+    border-radius:10px;
+}
 </style>
-
 </head>
 
 <body>
@@ -50,69 +61,89 @@ button:hover{
 
 <h1>❤️ Nachricht an Lea ❤️</h1>
 
+<!-- Nachricht -->
 <input id="msg" placeholder="Deine Nachricht">
 
 <br>
 
-<label>Helligkeit</label>
+<!-- Helligkeit -->
+<label>Helligkeit</label><br>
+<input class="slider" type="range" min="1" max="15" value="5" id="brightness">
 
 <br>
 
-<input class="slider" type="range" min="0" max="15" value="5" id="brightness">
-
-<br>
-
+<!-- Buttons -->
 <button onclick="sendMessage()">Senden</button>
-
 <br>
-
 <button onclick="displayOn()">Display AN</button>
 <button onclick="displayOff()">Display AUS</button>
+
+<!-- Statusanzeige -->
+<div class="status">
+<h3>Status</h3>
+<p>Aktueller Text: <span id="statusText">-</span></p>
+<p>Helligkeit: <span id="statusBrightness">-</span></p>
+<p>LED: <span id="statusOn">-</span></p>
+</div>
 
 </div>
 
 <script>
+// Firebase URL
+const firebaseURL = "https://lea-led-display-default-rtdb.firebaseio.com/display.json";
 
-const firebaseURL =
-"https://lea-led-display-default-rtdb.firebaseio.com/display.json"
-
+// Nachricht senden
 function sendMessage(){
+    let message = document.getElementById("msg").value;
+    let brightness = document.getElementById("brightness").value;
 
-let message = document.getElementById("msg").value
-let brightness = document.getElementById("brightness").value
-
-fetch(firebaseURL,{
-method:"PUT",
-body:JSON.stringify({
-message:message,
-brightness:parseInt(brightness),
-on:true
-})
-})
-
+    fetch(firebaseURL,{
+        method:"PUT",
+        body:JSON.stringify({
+            message: message,
+            brightness: parseInt(brightness),
+            on: true
+        })
+    });
 }
 
+// Display AN
 function displayOn(){
-
-fetch(firebaseURL,{
-method:"PATCH",
-body:JSON.stringify({
-on:true
-})
-})
-
+    fetch(firebaseURL,{
+        method:"PATCH",
+        body:JSON.stringify({on:true})
+    });
 }
 
+// Display AUS
 function displayOff(){
-
-fetch(firebaseURL,{
-method:"PATCH",
-body:JSON.stringify({
-on:false
-})
-})
-
+    fetch(firebaseURL,{
+        method:"PATCH",
+        body:JSON.stringify({on:false})
+    });
 }
+
+// Status von Firebase abrufen und Anzeige aktualisieren
+function updateStatus(){
+    fetch(firebaseURL)
+    .then(response => response.json())
+    .then(data => {
+        if(data){
+            document.getElementById("statusText").innerText = data.message || "-";
+            document.getElementById("statusBrightness").innerText = data.brightness || "-";
+            document.getElementById("statusOn").innerText = data.on ? "AN" : "AUS";
+
+            // Slider auf aktuelle Helligkeit setzen
+            if(data.brightness) document.getElementById("brightness").value = data.brightness;
+        }
+    });
+}
+
+// Status alle 2 Sekunden aktualisieren
+setInterval(updateStatus, 2000);
+
+// Initial laden
+updateStatus();
 
 </script>
 
