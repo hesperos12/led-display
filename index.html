@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Lea LED Display ❤️</title>
+
+<style>
+
+body{
+    background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+    font-family: Arial;
+    text-align:center;
+    color:white;
+}
+
+.container{
+    margin-top:100px;
+}
+
+input,button{
+    font-size:20px;
+    padding:10px;
+    margin:10px;
+    border-radius:10px;
+    border:none;
+}
+
+button{
+    background:#ff4d6d;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#ff1e4d;
+}
+
+.slider{
+    width:300px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>❤️ Nachricht an Lea ❤️</h1>
+
+<input id="msg" placeholder="Deine Nachricht">
+
+<br>
+
+<label>Helligkeit</label>
+
+<br>
+
+<input class="slider" type="range" min="0" max="15" value="5" id="brightness">
+
+<br>
+
+<button onclick="sendMessage()">Senden</button>
+
+<br>
+
+<button onclick="displayOn()">Display AN</button>
+<button onclick="displayOff()">Display AUS</button>
+
+</div>
+
+<script>
+
+const firebaseURL =
+"https://lea-led-display-default-rtdb.firebaseio.com/display.json"
+
+function sendMessage(){
+
+let message = document.getElementById("msg").value
+let brightness = document.getElementById("brightness").value
+
+fetch(firebaseURL,{
+method:"PUT",
+body:JSON.stringify({
+message:message,
+brightness:parseInt(brightness),
+on:true
+})
+})
+
+}
+
+function displayOn(){
+
+fetch(firebaseURL,{
+method:"PATCH",
+body:JSON.stringify({
+on:true
+})
+})
+
+}
+
+function displayOff(){
+
+fetch(firebaseURL,{
+method:"PATCH",
+body:JSON.stringify({
+on:false
+})
+})
+
+}
+
+</script>
+
+</body>
+</html>
