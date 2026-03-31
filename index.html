@@ -100,10 +100,10 @@ button:hover{
 <br>
 
 <!-- Buttons -->
-<button onclick="sendMessage()">Senden</button>
+<button onclick="sendMessage_1()">Senden an Lea</button>
 <br>
-<button onclick="displayOn()">Display AN</button>
-<button onclick="displayOff()">Display AUS</button>
+<button onclick="displayOn_1()">Display von Lea AN</button>
+<button onclick="displayOff_1()">Display von Lea AUS</button>
 
 <!-- Statusanzeige -->
 <div class="status">
@@ -122,14 +122,26 @@ const firebaseURL = "https://lea-led-display-default-rtdb.firebaseio.com/display
 function sendMessage(){
     let message = document.getElementById("msg").value;
     let brightness = document.getElementById("brightness").value;
-    let message_1 = document.getElementById("msg_1").value;
-    let brightness_1 = document.getElementById("brightness_1").value;
 
     fetch(firebaseURL,{
         method:"PUT",
         body:JSON.stringify({
             message: message,
             brightness: parseInt(brightness),
+            on: true
+        })
+    });
+}
+
+function sendMessage_1(){
+    let message = document.getElementById("msg_1").value;
+    let brightness = document.getElementById("brightness_1").value;
+
+    fetch(firebaseURL,{
+        method:"PUT",
+        body:JSON.stringify({
+            message: message_1,
+            brightness: parseInt(brightness_1),
             on: true
         })
     });
@@ -148,6 +160,21 @@ function displayOff(){
     fetch(firebaseURL,{
         method:"PATCH",
         body:JSON.stringify({on:false})
+    });
+}
+
+function displayOn_1(){
+    fetch(firebaseURL,{
+        method:"PATCH",
+        body:JSON.stringify({on_1:true})
+    });
+}
+
+// Display AUS
+function displayOff_1(){
+    fetch(firebaseURL,{
+        method:"PATCH",
+        body:JSON.stringify({on_1:false})
     });
 }
 
