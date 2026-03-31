@@ -89,28 +89,28 @@ button:hover{
 <h1>❤️ Nachricht an Lea ❤️</h1>
 
 <!-- Nachricht -->
-<input id="msg_1" placeholder="Deine Nachricht">
+<input id="msg_lea" placeholder="Deine Nachricht">
 
 <br>
 
 <!-- Helligkeit -->
 <label>Helligkeit</label><br>
-<input class="slider" type="range" min="1" max="15" value="5" id="brightness_1">
+<input class="slider" type="range" min="1" max="15" value="5" id="brightness_lea">
 
 <br>
 
 <!-- Buttons -->
-<button onclick="sendMessage_1()">Senden an Lea</button>
+<button onclick="sendMessage_lea()">Senden an Lea</button>
 <br>
-<button onclick="displayOn_1()">Display von Lea AN</button>
-<button onclick="displayOff_1()">Display von Lea AUS</button>
+<button onclick="displayOn_lea()">Display von Lea AN</button>
+<button onclick="displayOff_lea()">Display von Lea AUS</button>
 
 <!-- Statusanzeige -->
 <div class="status">
 <h3>Status</h3>
-<p>Aktueller Text: <span id="statusText_1">-</span></p>
-<p>Helligkeit: <span id="statusBrightness_1">-</span></p>
-<p>LED: <span id="statusOn_1">-</span></p>
+<p>Aktueller Text: <span id="statusText_lea">-</span></p>
+<p>Helligkeit: <span id="statusBrightness_lea">-</span></p>
+<p>LED: <span id="statusOn_lea">-</span></p>
 </div>
 </div>
 
@@ -133,16 +133,16 @@ function sendMessage(){
     });
 }
 
-function sendMessage_1(){
-    let message = document.getElementById("msg_1").value;
-    let brightness = document.getElementById("brightness_1").value;
+function sendMessage_lea(){
+    let message_lea = document.getElementById("msg_lea").value;
+    let brightness_lea = document.getElementById("brightness_lea").value;
 
     fetch(firebaseURL,{
         method:"PUT",
         body:JSON.stringify({
-            message: message_1,
-            brightness: parseInt(brightness_1),
-            on: true
+            message_lea: message_lea,
+            brightness_lea: parseInt(brightness_lea),
+            on_lea: true
         })
     });
 }
@@ -163,18 +163,18 @@ function displayOff(){
     });
 }
 
-function displayOn_1(){
+function displayOn_lea(){
     fetch(firebaseURL,{
         method:"PATCH",
-        body:JSON.stringify({on_1:true})
+        body:JSON.stringify({on_lea:true})
     });
 }
 
 // Display AUS
-function displayOff_1(){
+function displayOff_lea(){
     fetch(firebaseURL,{
         method:"PATCH",
-        body:JSON.stringify({on_1:false})
+        body:JSON.stringify({on_lea:false})
     });
 }
 
@@ -187,13 +187,13 @@ function updateStatus(){
             document.getElementById("statusText").innerText = data.message || "-";
             document.getElementById("statusBrightness").innerText = data.brightness || "-";
             document.getElementById("statusOn").innerText = data.on ? "AN" : "AUS";
-            document.getElementById("statusText_1").innerText = data.message_1 || "-";
-            document.getElementById("statusBrightness_1").innerText = data.brightness_1 || "-";
-            document.getElementById("statusOn_1").innerText = data.on_1 ? "AN" : "AUS";
+            document.getElementById("statusText_lea").innerText = data.message_lea || "-";
+            document.getElementById("statusBrightness_lea").innerText = data.brightness_lea || "-";
+            document.getElementById("statusOn_lea").innerText = data.on_lea ? "AN" : "AUS";
 
             // Slider auf aktuelle Helligkeit setzen
             if(data.brightness) document.getElementById("brightness").value = data.brightness;
-            if(data.brightness_1) document.getElementById("brightness_1").value = data.brightness_1;
+            if(data.brightness_lea) document.getElementById("brightness_lea").value = data.brightness_lea;
         }
     });
 }
