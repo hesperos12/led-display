@@ -179,7 +179,22 @@ function displayOff_lea(){
 }
 
 // Status von Firebase abrufen und Anzeige aktualisieren
-function updateStatus(){
+function updateStatus_lea(){
+    fetch(firebaseURL)
+    .then(response => response.json())
+    .then(data => {
+        if(data){
+            document.getElementById("statusText_lea").innerText = data.message_lea || "-";
+            document.getElementById("statusBrightness_lea").innerText = data.brightness_lea || "-";
+            document.getElementById("statusOn_lea").innerText = data.on_lea ? "AN" : "AUS";
+
+            // Slider auf aktuelle Helligkeit setzen
+            if(data.brightness_lea) document.getElementById("brightness_lea").value = data.brightness_lea;
+        }
+    });
+}
+
+function updateStatus_stian(){
     fetch(firebaseURL)
     .then(response => response.json())
     .then(data => {
@@ -187,22 +202,20 @@ function updateStatus(){
             document.getElementById("statusText").innerText = data.message || "-";
             document.getElementById("statusBrightness").innerText = data.brightness || "-";
             document.getElementById("statusOn").innerText = data.on ? "AN" : "AUS";
-            document.getElementById("statusText_lea").innerText = data.message_lea || "-";
-            document.getElementById("statusBrightness_lea").innerText = data.brightness_lea || "-";
-            document.getElementById("statusOn_lea").innerText = data.on_lea ? "AN" : "AUS";
-
+            
             // Slider auf aktuelle Helligkeit setzen
             if(data.brightness) document.getElementById("brightness").value = data.brightness;
-            if(data.brightness_lea) document.getElementById("brightness_lea").value = data.brightness_lea;
         }
     });
 }
 
 // Status alle 2 Sekunden aktualisieren
-setInterval(updateStatus, 5000);
+setInterval(updateStatus_stian, 3000);
+setInterval(updateStatus_lea, 3000);
 
 // Initial laden
-updateStatus();
+updateStatus_lea();
+updateStatus_stian();
 
 </script>
 
