@@ -124,7 +124,7 @@ function sendMessage(){
     let brightness = document.getElementById("brightness").value;
 
     fetch(firebaseURL,{
-        method:"PUT",
+        method:"PATCH",
         body:JSON.stringify({
             message: message,
             brightness: parseInt(brightness),
@@ -138,7 +138,7 @@ function sendMessage_lea(){
     let brightness_lea = document.getElementById("brightness_lea").value;
 
     fetch(firebaseURL,{
-        method:"PUT",
+        method:"PATCH",
         body:JSON.stringify({
             message_lea: message_lea,
             brightness_lea: parseInt(brightness_lea),
